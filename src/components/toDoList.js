@@ -18,8 +18,22 @@ export class ToDoList extends Component {
         {task:'Do your stuff', 'status':'pending'},
         {task:'Take Lunch', 'status':'pending'},
         {task:'Leave the Office', 'status':'pending'}
-    ]};
-    this.doneTask = []
+      ],
+      doneTask:[],
+      dataFromAPI: []
+    }
+  }
+
+  componentDidMount(){
+    fetch('https://reqres.in/api/users?page=2')
+    .then(results => {
+      console.log('RESPONSE:', results);
+      return results.json();
+    }).then(data =>{
+      console.log('.then data:',data);
+      this.setState({dataFromAPI: data.data});
+      console.log('ARRAY DATA this.dataFromAPI:',this.state.dataFromAPI);
+    })
   }
 
   onAddNewInvoked = (_newTask) => {
@@ -37,7 +51,7 @@ export class ToDoList extends Component {
     CurrentTaskList.forEach(el=>{
       if(value === 'on' && currentData.task === el.task){
         el.status = 'Completed';
-        this.doneTask.push(el);
+        this.state.doneTask.push(el);
         console.log('COMPLETE TASK:', this.doneTask);
 
          let index = CurrentTaskList.indexOf(el);
@@ -54,7 +68,7 @@ export class ToDoList extends Component {
   render(){
     return(
       <div className="job-cell">
-        <h2>HELLO TRIAL APP</h2>
+        <h2>HELLO TRIAL APP</h2><br/>
         <NewToDoTask onAddNew={this.onAddNewInvoked}/>
         <h3>The Task List</h3>
         <div>
@@ -62,12 +76,43 @@ export class ToDoList extends Component {
             this.state.taskList.map((info, i)=> <ToDoTask info={info} key={i} checkMarked={this.addedCompleted}/>)
           }
         </div>
-        <div>
+        <div><br/>
           <h3>Completed task</h3>
           {
-            this.doneTask.map((done, i)=>   <CompletedTask info1={done} key={i}/>)
+            this.state.doneTask.map((done, i)=>   <CompletedTask info1={done} key={i}/>)
           }
         </div>
+        <div><br/>
+        <h4> More Exploration</h4>
+        <div className="fisrtDiv">First</div>
+        <div className="secondDiv">Second</div><br/>
+        <div className="thirdDiv">Third</div>
+        <div className="fourthDiv">Fourth</div>
+        </div><br/>
+        <h4> DATA FROM API</h4>
+        <div>
+        <table>
+        <thead>
+        <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>User Picture</th>
+        </tr>
+        </thead>
+        <tbody>
+        {this.state.dataFromAPI.map((done, i)=>
+          <tr>
+          <td>{done.id}</td>
+          <td>{done.first_name}</td>
+          <td>{done.last_name}</td>
+          <td><img src={done.avatar} alt="Image Not Loaded"/></td>
+          </tr>
+        )}
+        </tbody>
+        </table>
+        </div>
+
       </div>
     );
   }

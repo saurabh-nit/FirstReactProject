@@ -9,12 +9,17 @@ export class ToDoTask extends Component {
     this.props.checkMarked(this.props.info, this.refs.checkboxValue.value);
     this.refs.checkboxValue.checked = false;
   }
+
   render(){
+    var myStyle = {
+      fontSize : 20,
+      color : "red"
+    }
     return (
       <div>
       <span>
       <input id="check" type="checkbox"  onClick={this.checkMarked1} ref="checkboxValue"/>
-      <span> TASK: {this.props.info.task}, STATUS: {this.props.info.status}</span>
+      <span style={myStyle}> TASK: {this.props.info.task}, STATUS: {this.props.info.status}</span>
       </span>
       </div>
     );
